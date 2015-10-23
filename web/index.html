@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="myApp" ng-controller="myController as ctrl">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.js"></script>
+        <link rel="stylesheet" href="subPages/bootstrap.css">
+
+    </head>
+    <body>
+
+        <div>
+            <ul>
+                <li><a href="#/All persons/">All persons</a></li>
+                <li><a href="#/New persons">new person</a></li>
+            </ul>
+        </div>
+        <div ng-view></div>
+        <script>
+            var myApp = angular.module('myApp', ['ngRoute']);
+            var persons = [
+            {id: 1, name: 'Jens', age : 18}
+            , {id: 2, name: 'Peter', age : 23}
+            , {id: 3, name: 'Hanne', age : 23}
+            ];
+            myApp.controller('myController', [ function(){
+            var self = this;
+                    self.persons = persons;
+                    self.nextId = 4;
+                    self.newPerson = {};
+                    self.savePerson = function(){
+                            self.newPerson.id = self.nextId;
+                            self.persons.push(self.newPerson);
+                            self.nextId++;
+                    };
+            }]);
+            myApp.config(['$routeProvider', function($routeProvider){
+            $routeProvider
+                    .when('/All persons', {
+                    templateUrl: 'subPages/AllPersons.html',
+                            Controller:'myController',
+                            ControllerAs:'ctrl'})
+                    .when('/New persons', {
+                    templateUrl: 'subPages/NewPerson.html',
+                            Controller:'myController',
+                            ControllerAs:'ctrl'})
+
+            }]);
+//            .otherwise({redirectTo: '/'});
+        </script>
+    </body>
+</html>
